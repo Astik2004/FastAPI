@@ -25,3 +25,12 @@ def get_patient(patient_id:str=Path(..., description="The ID of the patient to r
     if patient_id in data:
         return data[patient_id] 
     raise HTTPException(status_code=404, detail="Patient not found")
+
+@app.get("/patients/age/{age}")
+def get_patients_by_age(age:int=Path(..., description="The age of the patients to retrieve")):
+    data=load_data()
+    result={pid:info for pid,info in data.items() if info["age"]==age}
+    if result:
+        return result
+    raise HTTPException(status_code=404, detail="No patients found with the specified age")
+
